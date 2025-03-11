@@ -74,3 +74,35 @@ Drop column age;
 
 -- Drop a table
 -- drop table students;
+
+-- Data Manipulation Language (DML)
+-- DML is used to manipulate data in the database.
+
+-- Insert data into the students table
+insert into students (id, full_name, email, password)
+values (1, "John Doe", "John@doe.ca", "password123");
+
+-- Insert multiple rows into the students table
+insert into students (id, full_name, email, password)
+values (2, "Jane Doe", "Jane@doe.ca", "password123"), 
+(3, "Alice Smith", "Alice@smith.ca", "password123");
+
+-- Selecting all data & columns from the students table
+select * from students;
+
+-- Selecting specific columns from the students table
+select id, full_name from students;
+
+-- Selecting data based on a condition
+select * from students where id > 1;
+
+-- Update data in the students table
+update students set password = 'newpassword' where id = 1;
+update students set password = 'newpassword123' where id in (2,3);
+
+-- Delete data from the students table
+delete from students WHERE id = 1;
+
+
+
+
