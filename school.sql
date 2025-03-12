@@ -103,6 +103,49 @@ update students set password = 'newpassword123' where id in (2,3);
 -- Delete data from the students table
 delete from students WHERE id = 1;
 
+-- What is a Primary Key?
+-- A primary key is a unique identifier for a record in a table. It is used to establish a relationship between tables.
+-- autoincrement is used to automatically generate a unique value for the primary key.
+
+alter table students
+change column id id int primary key auto_increment;
+
+-- Insert data into the students table without an id
+insert into students (full_name, email, password)
+values ("John Doe", "John@doe.ca", "password1234");
+
+-- What is a Foreign Key?
+-- A foreign key is a column in a table that references the primary key of another table. It is used to establish a relationship between tables.
+
+-- Courses Table
+create table courses (
+    id int primary key auto_increment, 
+    name varchar(100),
+    student_id int,
+    -- We are essentially stating that the student_id column in the courses table is a foreign key that references the id column in the students table.
+    foreign key (student_id) references students(id)
+);
+
+-- Insert data into the courses table
+insert into courses (name, student_id)
+values ("Math", 2), 
+       ("Science", 3),
+       ("History", 2),
+       ("English", 3),
+       ("Art", 4);
+
+-- Inserting a student_id that does not exist in the students table will result in an error.
+insert into courses (name, student_id) values ("Math", 10);
+
+-- Ordering by a column in descending/ascending order
+select * from courses order by name asc;
+
+-- Limiting the number of rows returned
+select * from courses order by name asc limit 2;
+
+-- Count and Group data based on a column
+-- This query will return the student id column and a count column that shows the number of courses each student is taking. This is accomplished by using the COUNT function and the GROUP BY clause to specify the column(student_id) to group by.
+select student_id, count(*) from courses group by student_id;
 
 
 
