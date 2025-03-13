@@ -126,7 +126,7 @@ values ("John Doe", "John@doe.ca", "password1234");
 -- SET NULL: This will set the foreign key column in the child table (courses) to NULL when a record in the parent table (students) is deleted or updated.
 -- NO ACTION: This is similar to RESTRICT. It prevents the deletion or update of a record in the parent table (students) if there are related records in the child table (courses).
 
--- Courses Table
+-- Courses Table in a one-to-many relationship (one student can take many courses)
 create table courses (
     id int primary key auto_increment, 
     name varchar(100),
@@ -167,4 +167,43 @@ from students s
 join courses c 
 on s.id = c.student_id;
 
+-- Many-to-Many Relationship
+-- In a many-to-many relationship, a student can take many courses, and a course can have many students.
+create table newCourses (
+    id int primary key auto_increment, 
+    name varchar(100)
+);
+
+-- Insert data into the courses table
+insert into newCourses (name)
+values ("Math"), 
+       ("Science"),
+       ("History"),
+       ("English"),
+       ("Art");
+
+-- We can use a junction/intermediate/bridge table to represent the many-to-many relationship.
+-- This typically involves creating a new table that has foreign keys that reference the primary keys of the two tables involved in the relationship.
+create table student_newCourses (
+    student_id int, 
+    newCourse_id int,
+    foreign key (student_id) references students(id) on delete CASCADE on update cascade,
+    foreign key (newCourse_id) references newCourses(id) on delete CASCADE on update cascade
+);
+
+-- Insert data into the student_newCourses table
+insert into student_newCourses (student_id, newCourse_id)
+values (2, 1), 
+       (3, 2),
+       (2, 3),
+       (3, 4),
+       (1, 5),
+       (3, 1),
+       (2, 2);
+
+-- Find all newCourses taken by a particular student
+select s.id, s.full_name, s.email, nc.name as 'course' from students s
+join student_newCourses snc on s.id = snc.student_id
+join newCourses nc on snc.newCourse_id = nc.id 
+where s.id = 2;
 
